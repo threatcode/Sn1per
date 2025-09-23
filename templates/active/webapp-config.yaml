@@ -1,0 +1,40 @@
+# Sn1per Advanced Web Application Security Scanner Configuration
+
+# API Discovery Settings
+api_discovery:
+  wordlist: '/usr/share/wordlists/api-endpoints.txt'
+  extensions: ['json', 'xml', 'txt', 'html']
+  enable_graphql: true
+  enable_rest: true
+
+# JavaScript Analysis Settings
+js_analysis:
+  enable_client_side: true
+  check_frameworks: true
+  dom_xss_detection: true
+
+# Web Vulnerability Detection Settings
+web_vulns:
+  check_cors: true
+  check_csp: true
+  check_headers: true
+  check_subdomain_takeover: true
+
+# Nuclei Integration Settings
+nuclei:
+  enabled: true
+  template_dir: '/usr/share/nuclei-templates/'
+  severity: ['info', 'low', 'medium', 'high', 'critical']
+
+# Reporting Settings
+reporting:
+  format: ['json', 'html', 'txt']
+  output_dir: './webapp-security-report'
+
+# Advanced Settings
+advanced:
+  timeout: 30
+  max_retries: 3
+  user_agent: 'Sn1per-WebAppScanner/2.0'
+  follow_redirects: true
+  verify_ssl: true
