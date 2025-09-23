@@ -82,12 +82,22 @@ jobs:
           docker manifest push ghcr.io/${{ github.repository_owner }}/sn1per:latest
 
       - name: Update README with image details
-        uses: michaelhenry/update-container-description@v1.0.0
-        with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          registry: ghcr.io
-          repository: ${{ github.repository_owner }}/sn1per
-          short-description: "Sn1per - Automated Pentest Framework"
-          readme-filepath: "./README.md"
-          readme-section: "docker"
+        run: |
+          # This is a simplified version that just logs the image details
+          # You can expand this to update the README.md file directly if needed
+          echo "Docker images have been successfully built and pushed to:"
+          echo "- ghcr.io/${{ github.repository_owner }}/sn1per:latest"
+          echo "- ghcr.io/${{ github.repository_owner }}/sn1per:kali"
+          echo "- ghcr.io/${{ github.repository_owner }}/sn1per:blackarch"
+          
+          # Uncomment and modify the following to update README.md directly
+          # echo "\n## Docker\n\n### Pull the latest image\n\n```bash\ndocker pull ghcr.io/${{ github.repository_owner }}/sn1per:latest\n```\n" > README.docker.md
+          # cat README.md | sed "/## Docker/,/## /{/## /!d;}" | sed "/## Docker/r README.docker.md" > README.new.md
+          # mv README.new.md README.md
+          # rm README.docker.md
+          # 
+          # git config --global user.name 'GitHub Actions'
+          # git config --global user.email 'actions@github.com'
+          # git add README.md
+          # git commit -m "docs: Update Docker image references" || echo "No changes to commit"
+          # git push
