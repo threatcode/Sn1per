@@ -4,6 +4,9 @@
 [![GitHub issues](https://img.shields.io/github/issues/1N3/Sn1per.svg)](https://github.com/1N3/Sn1per/issues)
 [![Github Stars](https://img.shields.io/github/stars/1N3/Sn1per.svg?style=social&label=Stars)](https://github.com/1N3/Sn1per/)
 [![GitHub Followers](https://img.shields.io/github/followers/1N3.svg?style=social&label=Follow)](https://github.com/1N3/Sn1per/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/threatcode/sn1per?logo=docker&label=Docker%20Pulls)](https://github.com/orgs/threatcode/packages/container/package/sn1per)
+[![GHCR](https://img.shields.io/badge/GHCR-Available-blue?logo=github)](https://github.com/orgs/threatcode/packages/container/package/sn1per)
+[![License](https://img.shields.io/github/license/1N3/Sn1per)](LICENSE.md)
 [![Tweet](https://img.shields.io/twitter/url/http/xer0dayz.svg?style=social)](https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fdeveloper.twitter.com%2Fen%2Fdocs%2Ftwitter-for-websites%2Ftweet-button%2Foverview&ref_src=twsrc%5Etfw&text=Sn1per%20-%20Automated%20Pentest%20Recon%20Scanner&tw_p=tweetbutton&url=https%3A%2F%2Fgithub.com%2F1N3%2FSn1per)
 [![Follow on Twitter](https://img.shields.io/twitter/follow/xer0dayz.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=xer0dayz)
 
@@ -97,6 +100,359 @@ To install Sn1per using an AWS EC2 instance:
     ```bash
     sudo docker compose -f docker-compose-blackarch.yml up
     ```
+
+## 🐳 Docker Containers (GHCR)
+
+Sn1per is available as pre-built Docker images on GitHub Container Registry (GHCR).
+
+### Available Images
+
+- **Latest Stable**: `ghcr.io/threatcode/sn1per:latest`
+- **Kali Linux Base**: `ghcr.io/threatcode/sn1per:kali`
+- **BlackArch Linux Base**: `ghcr.io/threatcode/sn1per:blackarch`
+- **Specific Version**: `ghcr.io/threatcode/sn1per:1.0.0` (replace with version number)
+
+### Quick Start
+
+Run Sn1per with Docker:
+
+```bash
+docker run --rm -it ghcr.io/threatcode/sn1per:latest --help
+```
+
+### Persistent Storage
+
+To save scan results and configurations between container runs, mount the following volumes:
+
+```bash
+docker run --rm -it \
+  -v ~/.sniper:/home/sniper/.sniper \
+  -v ~/.msf4:/home/sniper/.msf4 \
+  ghcr.io/threatcode/sn1per:latest [options] [target]
+```
+
+### Docker Compose
+
+For more complex deployments, use the provided `docker-compose.yml`:
+
+```bash
+docker compose up -d
+```
+
+### Building from Source
+
+If you prefer to build the images yourself:
+
+```bash
+# Build Kali Linux version
+docker build -t sn1per:kali -f Dockerfile .
+
+# Build BlackArch version
+docker build -t sn1per:blackarch -f Dockerfile.blackarch .
+```
+
+### Security Considerations
+
+- The container runs as a non-root user `sniper`
+- All sensitive data is stored in mounted volumes
+- Network access is limited by default
+- Use `--cap-drop=ALL` for additional security
+
+### Automated Builds
+
+Images are automatically built and published to GHCR on each git tag push. The build process includes:
+
+- Multi-architecture support (amd64/arm64)
+- Vulnerability scanning
+- Automated testing
+- Latest security updates
+
+### Kubernetes Deployment
+
+For production deployments, you can deploy Sn1per on Kubernetes:
+
+```yaml
+# sn1per-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sn1per
+  labels:
+    app: sn1per
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sn1per
+  template:
+    metadata:
+      labels:
+        app: sn1per
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: sn1per
+        image: ghcr.io/threatcode/sn1per:latest
+        imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+        volumeMounts:
+        - name: sniper-data
+          mountPath: /home/sniper/.sniper
+        - name: msf4-data
+          mountPath: /home/sniper/.msf4
+        resources:
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+          requests:
+            cpu: "1"
+            memory: "2Gi"
+      volumes:
+      - name: sniper-data
+        persistentVolumeClaim:
+          claimName: sn1per-pvc
+      - name: msf4-data
+        emptyDir: {}
+```
+
+### Common Docker Commands
+
+```bash
+# Run a quick scan
+docker run --rm ghcr.io/threatcode/sn1per:latest -t example.com
+
+# Run in interactive mode
+docker run --rm -it ghcr.io/threatcode/sn1per:latest --interactive
+
+# Update Sn1per
+docker pull ghcr.io/threatcode/sn1per:latest
+
+# View logs
+docker logs <container_id>
+
+# Execute commands in running container
+docker exec -it <container_id> /bin/bash
+```
+
+### CI/CD Integration
+
+You can easily integrate Sn1per into your CI/CD pipeline. Here's an example GitHub Actions workflow:
+
+```yaml
+# .github/workflows/security-scan.yml
+name: Security Scan
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Run daily
+  workflow_dispatch:
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Run Sn1per Scan
+      uses: addnab/docker-run-action@v3
+      with:
+        image: ghcr.io/threatcode/sn1per:latest
+        options: -v ${{ github.workspace }}/reports:/reports
+        run: |
+          sniper -t example.com -o /reports/scan_$(date +%Y%m%d).json
+
+    - name: Upload Scan Results
+      uses: actions/upload-artifact@v3
+      with:
+        name: security-scan-results
+        path: ${{ github.workspace }}/reports/
+        if-no-files-found: error
+```
+
+### Docker Compose Examples
+
+#### Basic Setup
+
+```yaml
+# docker-compose.yml
+version: '3.8'
+
+services:
+  sn1per:
+    image: ghcr.io/threatcode/sn1per:latest
+    container_name: sn1per
+    volumes:
+      - ./data/sniper:/home/sniper/.sniper
+      - ./data/msf4:/home/sniper/.msf4
+    environment:
+      - TZ=UTC
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+```
+
+#### With Database
+
+```yaml
+# docker-compose.db.yml
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: sn1per
+      POSTGRES_PASSWORD: your_secure_password
+      POSTGRES_DB: sn1per
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+  sn1per:
+    image: ghcr.io/threatcode/sn1per:latest
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=sn1per
+      - DB_PASSWORD=your_secure_password
+      - DB_NAME=sn1per
+    volumes:
+      - ./data/sniper:/home/sniper/.sniper
+      - ./data/msf4:/home/sniper/.msf4
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+volumes:
+  postgres_data:
+```
+
+### Advanced Kubernetes Configurations
+
+#### Horizontal Pod Autoscaler (HPA)
+
+```yaml
+# hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: sn1per
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: sn1per
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+```
+
+#### Network Policies
+
+```yaml
+# network-policy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: sn1per-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: sn1per
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from: []
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+        - 169.254.169.254/32  # Block cloud metadata
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443
+```
+
+### Troubleshooting
+
+- **Permission Issues**: Ensure mounted volumes have the correct permissions
+  ```bash
+  sudo chown -R $USER:$USER ~/.sniper ~/.msf4
+  ```
+
+- **Network Issues**: Use `--network=host` if you encounter network-related problems
+  ```bash
+  docker run --network=host ghcr.io/threatcode/sn1per:latest [options]
+  ```
+
+- **Database Issues**: If Metasploit database fails to start:
+  ```bash
+  # For Docker
+  docker exec -it <container_id> msfdb reinit
+  
+  # For Kubernetes
+  kubectl exec -it <pod_name> -- msfdb reinit
+  ```
+
+- **Debug Mode**: Enable verbose output
+  ```bash
+  docker run --rm ghcr.io/threatcode/sn1per:latest -v -t example.com
+  ```
+
+- **Check Container Logs**:
+  ```bash
+  # Docker
+  docker logs <container_id>
+  
+  # Kubernetes
+  kubectl logs <pod_name>
+  ```
+
+- **Inspect Container**:
+  ```bash
+  # Docker
+  docker inspect <container_id>
+  
+  # Kubernetes
+  kubectl describe pod <pod_name>
+  ```
+
+- **Check Resource Usage**:
+  ```bash
+  # Docker
+  docker stats
+  
+  # Kubernetes
+  kubectl top pod
+  ```
+
+<!-- docker -->
 
 1. Run the container
 

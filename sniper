@@ -86,14 +86,14 @@ $star HTTP WEBSCAN MODE
 $star ENABLE BRUTEFORCE
  sniper -t <TARGET> -b
 
-$star AIRSTRIKE MODE
- sniper -f targets.txt -m airstrike
-
 $star NUKE MODE WITH TARGET LIST, BRUTEFORCE ENABLED, FULLPORTSCAN ENABLED, OSINT ENABLED, RECON ENABLED, WORKSPACE & LOOT ENABLED
  sniper -f targets.txt -m nuke -w <WORKSPACE_ALIAS>
 
-$star MASS PORT SCAN MODE
- sniper -f targets.txt -m massportscan -w <WORKSPACE_ALIAS>
+$star AUTOMATED REMEDIATION MODE - AI-POWERED FIX GENERATION
+ sniper -t <TARGET> -m remediation -w <WORKSPACE_ALIAS>
+
+$star REAL-TIME COLLABORATION MODE - TEAM COORDINATION & COMMUNICATION
+ sniper -t <TARGET> -m collaboration -w <WORKSPACE_ALIAS>
 
 $star MASS WEB SCAN MODE
  sniper -f targets.txt -m massweb -w <WORKSPACE_ALIAS>
@@ -686,7 +686,7 @@ source modes/massportscan.sh
 source modes/stealth.sh
 source modes/airstrike.sh
 source modes/nuke.sh
-source modes/normal.sh
+source modes/remediation.sh
 
 rm -f /tmp/update-check.txt 2> /dev/null
 
