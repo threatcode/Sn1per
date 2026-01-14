@@ -1,0 +1,317 @@
+# Cloud Security Configuration for Sn1per
+# This configuration optimizes Sn1per for cloud security assessment
+
+# Cloud Provider Settings
+CLOUD_PROVIDER="all"  # Options: all, aws, azure, gcp, digitalocean, oracle, alibaba
+CLOUD_REGION=""  # Leave empty for all regions
+
+# AWS Configuration
+AWS_ACCESS_KEY_ID=""
+AWS_SECRET_ACCESS_KEY=""
+AWS_SESSION_TOKEN=""
+AWS_REGIONS="us-east-1,us-east-2,us-west-1,us-west-2,eu-west-1,eu-central-1,ap-southeast-1,ap-southeast-2,ap-northeast-1,ap-northeast-2,sa-east-1,ap-south-1,ca-central-1"
+AWS_SCAN_SERVICES="ec2,s3,iam,rds,lambda,cloudfront,cloudtrail,config,cloudformation,ecr,ecs,eks,elasticache,es,glacier,kms,secretsmanager,ssm"
+
+# Azure Configuration
+AZURE_CLIENT_ID=""
+AZURE_CLIENT_SECRET=""
+AZURE_TENANT_ID=""
+AZURE_SUBSCRIPTION_ID=""
+AZURE_REGIONS="eastus,eastus2,westus,westus2,centralus,northcentralus,southcentralus,northeurope,westeurope"
+
+# Google Cloud Configuration
+GOOGLE_APPLICATION_CREDENTIALS=""
+GOOGLE_CLOUD_PROJECT=""
+GOOGLE_CLOUD_REGIONS="us-central1,us-east1,us-east4,us-west1,us-west2,us-west3,us-west4,northamerica-northeast1,southamerica-east1,europe-north1,europe-west1,europe-west2,europe-west3,europe-west4,europe-west6,asia-east1,asia-east2,asia-northeast1,asia-northeast2,asia-northeast3,asia-south1,asia-southeast1,asia-southeast2,australia-southeast1"
+
+# Cloud Security Scanning Options
+SCAN_CLOUD_STORAGE="1"
+SCAN_CLOUD_COMPUTE="1"
+SCAN_CLOUD_NETWORKING="1"
+SCAN_CLOUD_IAM="1"
+SCAN_CLOUD_DATABASES="1"
+SCAN_CLOUD_LOGGING="1"
+SCAN_CLOUD_SECURITY_SERVICES="1"
+
+# Cloud Storage Scanning Options
+SCAN_STORAGE_PUBLIC_ACCESS="1"
+SCAN_STORAGE_ENCRYPTION="1"
+SCAN_STORAGE_LOGGING="1"
+SCAN_STORAGE_VERSIONING="1"
+SCAN_STORAGE_ACCESS_CONTROL="1"
+
+# Compute Scanning Options
+SCAN_COMPUTE_VULNERABILITIES="1"
+SCAN_COMPUTE_CONFIGURATION="1"
+SCAN_COMPUTE_SECURITY_GROUPS="1"
+SCAN_COMPUTE_METADATA="1"
+SCAN_COMPUTE_IMAGES="1"
+
+# Networking Scanning Options
+SCAN_NETWORK_ACLS="1"
+SCAN_LOAD_BALANCERS="1"
+SCAN_CDN_CONFIGURATION="1"
+SCAN_DNS_CONFIGURATION="1"
+SCAN_VPC_CONFIGURATION="1"
+
+# IAM Scanning Options
+SCAN_IAM_POLICIES="1"
+SCAN_IAM_ROLES="1"
+SCAN_IAM_USERS="1"
+SCAN_IAM_GROUPS="1"
+SCAN_IAM_KEYS="1"
+SCAN_IAM_PASSWORD_POLICY="1"
+SCAN_IAM_MFA="1"
+
+# Database Scanning Options
+SCAN_DATABASE_PUBLIC_ACCESS="1"
+SCAN_DATABASE_ENCRYPTION="1"
+SCAN_DATABASE_BACKUPS="1"
+SCAN_DATABASE_PATCHES="1"
+
+# Logging and Monitoring Options
+SCAN_CLOUDTRAIL_LOGS="1"
+SCAN_CLOUDWATCH_LOGS="1"
+SCAN_STACKDRIVER_LOGS="1"
+SCAN_MONITORING_ALERTS="1"
+SCAN_CONFIG_RULES="1"
+
+# Security Services Options
+SCAN_WAF_CONFIGURATION="1"
+SCAN_SHIELD_CONFIGURATION="1"
+SCAN_GUARDDUTY_FINDINGS="1"
+SCAN_SECURITY_HUB_FINDINGS="1"
+SCAN_INSPECTOR_FINDINGS="1"
+
+# Cloud Security Tools
+USE_CLOUDFLARE_SCAN="1"
+USE_CLOUDFLARE_IP_RANGES="1"
+USE_AWS_INSPECTOR="1"
+USE_AWS_TRUSTED_ADVISOR="1"
+USE_AZURE_SECURITY_CENTER="1"
+USE_GCP_SECURITY_COMMAND_CENTER="1"
+
+# Cloud Security Scanners
+USE_CLOUDFLAIR="1"
+USE_CLOUDFRONT_ENUM="1"
+USE_S3SCANNER="1"
+USE_CLOUDFAIL="1"
+USE_CLOUDGUARDIAN="1"
+
+# Rate Limiting and Throttling
+CLOUD_API_RATE_LIMIT="100"  # Requests per second
+CLOUD_API_RETRY_ATTEMPTS="3"
+CLOUD_API_TIMEOUT="30"  # seconds
+
+# Output and Reporting
+CLOUD_REPORT_FORMAT="html"  # Options: html, json, csv, xml
+CLOUD_REPORT_DETAIL_LEVEL="detailed"  # Options: quick, standard, detailed
+CLOUD_REPORT_OUTPUT_DIR="$LOOT_DIR/cloud"
+
+# Notification Settings
+CLOUD_ALERT_CRITICAL="1"
+CLOUD_ALERT_HIGH="1"
+CLOUD_ALERT_MEDIUM="1"
+CLOUD_ALERT_LOW="0"
+CLOUD_ALERT_INFO="0"
+
+# Cloud Provider Specific Settings
+## AWS Specific
+AWS_SCAN_ORGANIZATIONS="1"
+AWS_SCAN_SERVICE_LIMITS="1"
+AWS_SCAN_TRUSTED_ADVISOR="1"
+AWS_SCAN_INSPECTOR_FINDINGS="1"
+AWS_SCAN_GUARDDUTY_FINDINGS="1"
+AWS_SCAN_MACIE_FINDINGS="1"
+AWS_SCAN_SECURITY_HUB_FINDINGS="1"
+
+## Azure Specific
+AZURE_SCAN_SECURITY_CENTER="1"
+AZURE_SCAN_POLICY_COMPLIANCE="1"
+AZURE_SCAN_ADVISOR_RECOMMENDATIONS="1"
+
+## GCP Specific
+GCP_SCAN_SECURITY_COMMAND_CENTER="1"
+GCP_SCAN_ORG_POLICIES="1"
+GCP_SCAN_ACTIVITY_LOGS="1"
+
+# Cloud Security Posture Management (CSPM)
+ENABLE_CSPM_SCAN="1"
+CSPM_PROVIDER=""  # Options: aws, azure, gcp, all
+CSPM_FRAMEWORKS="cis,csc,iso27001,hipaa,gdpr"
+
+# Cloud Workload Protection (CWP)
+ENABLE_CWP_SCAN="1"
+CWP_SCAN_CONTAINERS="1"
+CWP_SCAN_SERVERLESS="1"
+CWP_SCAN_VM="1"
+
+# Cloud Security Posture Rules
+ENABLE_CSPM_RULES="1"
+CSPM_RULES_PATH="$INSTALL_DIR/conf/cspm-rules"
+
+# Cloud Security Exclusions
+CLOUD_EXCLUDE_RESOURCES=""  # Comma-separated list of resource ARNs to exclude
+CLOUD_EXCLUDE_REGIONS=""  # Comma-separated list of regions to exclude
+CLOUD_EXCLUDE_SERVICES=""  # Comma-separated list of services to exclude
+
+# Cloud Security Benchmarking
+ENABLE_CLOUD_BENCHMARK="1"
+CLOUD_BENCHMARK_TOOL=""  # Options: prowler, scoutsuite, cloud-custodian
+CLOUD_BENCHMARK_PROFILES="cis,csc"
+
+# Cloud Security Scanning Tools
+CLOUD_SCANNER_TOOL=""  # Options: nuclei, nuclei-templates, cloud-sniper, pacu
+CLOUD_SCANNER_TEMPLATES="$INSTALL_DIR/cloud-templates"
+
+# Cloud Security Scanning Options
+CLOUD_SCAN_DEPTH="standard"  # Options: quick, standard, deep
+CLOUD_SCAN_THREADS="10"
+CLOUD_SCAN_TIMEOUT="3600"  # seconds
+
+# Cloud Security Output Options
+CLOUD_OUTPUT_VERBOSE="0"
+CLOUD_OUTPUT_DEBUG="0"
+CLOUD_OUTPUT_QUIET="0"
+
+# Cloud Security API Options
+CLOUD_API_CACHE_ENABLED="1"
+CLOUD_API_CACHE_TTL="3600"  # seconds
+CLOUD_API_CACHE_DIR="$HOME/.sniper/cloud-cache"
+
+# Cloud Security Compliance Options
+CLOUD_COMPLIANCE_STANDARDS="cis,pcidss,gdpr,hipaa,nist"
+CLOUD_COMPLIANCE_REPORT="1"
+
+# Cloud Security Remediation Options
+CLOUD_AUTO_REMEDIATE="0"
+CLOUD_REMEDIATION_DRY_RUN="1"
+
+# Cloud Security Integration Options
+INTEGRATE_ASFF="1"  # AWS Security Finding Format
+INTEGRATE_SECURITY_HUB="1"
+INTEGRATE_SLACK="0"
+INTEGRATE_JIRA="0"
+INTEGRATE_PAGERDUTY="0"
+
+# Cloud Security Notification Options
+NOTIFY_ON_CRITICAL="1"
+NOTIFY_ON_HIGH="1"
+NOTIFY_ON_MEDIUM="0"
+NOTIFY_ON_LOW="0"
+NOTIFY_ON_INFO="0"
+
+# Cloud Security Schedule Options
+SCHEDULE_SCAN_DAILY="0"
+SCHEDULE_SCAN_WEEKLY="0"
+SCHEDULE_SCAN_MONTHLY="1"
+SCHEDULE_SCAN_CRON="0 0 1 * *"  # First day of every month at midnight
+
+# Cloud Security Advanced Options
+CLOUD_ADVANCED_SCAN="0"
+CLOUD_AGGRESSIVE_SCAN="0"
+CLOUD_PASSIVE_SCAN="1"
+CLOUD_ACTIVE_SCAN="0"
+
+# Cloud Security API Throttling
+CLOUD_API_THROTTLE="100"  # milliseconds between API calls
+CLOUD_API_MAX_RETRIES="3"
+CLOUD_API_RETRY_DELAY="5"  # seconds
+
+# Cloud Security Data Collection
+COLLECT_CLOUD_METADATA="1"
+COLLECT_CLOUD_LOGS="1"
+COLLECT_CLOUD_METRICS="1"
+COLLECT_CLOUD_EVENTS="1"
+
+# Cloud Security Data Retention
+RETAIN_CLOUD_DATA_DAYS="90"
+COMPRESS_CLOUD_DATA="1"
+ENCRYPT_CLOUD_DATA="1"
+
+# Cloud Security Advanced Scanning
+ENABLE_CLOUD_PENETRATION_TESTING="0"
+ENABLE_CLOUD_RED_TEAMING="0"
+ENABLE_CLOUD_BLUE_TEAMING="1"
+ENABLE_CLOUD_PURPLE_TEAMING="0"
+
+# Cloud Security Automation
+ENABLE_CLOUD_AUTOMATION="1"
+AUTOMATION_PROVIDER=""  # Options: aws-step-functions, azure-logic-apps, gcp-workflows
+AUTOMATION_TRIGGER=""  # Options: schedule, event, manual
+AUTOMATION_SCHEDULE="rate(1 day)"  # Default schedule for automation
+
+# Cloud Security Customization
+CUSTOM_CHECKS_ENABLED="1"
+CUSTOM_CHECKS_DIR="$INSTALL_DIR/conf/cloud-checks"
+CUSTOM_RULES_ENABLED="1"
+CUSTOM_RULES_DIR="$INSTALL_DIR/conf/cloud-rules"
+
+# Cloud Security API Security
+SCAN_API_GATEWAYS="1"
+SCAN_API_ENDPOINTS="1"
+SCAN_API_DOCUMENTATION="1"
+SCAN_API_AUTHENTICATION="1"
+SCAN_API_RATE_LIMITING="1"
+
+# Cloud Security Container Security
+SCAN_CONTAINER_REGISTRIES="1"
+SCAN_CONTAINER_IMAGES="1"
+SCAN_CONTAINER_ORCHESTRATION="1"
+SCAN_CONTAINER_RUNTIME="1"
+
+# Cloud Security Serverless Security
+SCAN_SERVERLESS_FUNCTIONS="1"
+SCAN_SERVERLESS_CONFIGURATION="1"
+SCAN_SERVERLESS_DEPENDENCIES="1"
+
+# Cloud Security Data Protection
+SCAN_DATA_CLASSIFICATION="1"
+SCAN_DATA_ENCRYPTION="1"
+SCAN_DATA_RETENTION="1"
+
+# Cloud Security Identity and Access
+SCAN_IDENTITY_FEDERATION="1"
+SCAN_ACCESS_ANALYTICS="1"
+SCAN_PRIVILEGED_ACCESS="1"
+
+# Cloud Security Network Security
+SCAN_NETWORK_TOPOLOGY="1"
+SCAN_NETWORK_TRAFFIC="1"
+SCAN_NETWORK_ACLS="1"
+
+# Cloud Security Logging and Monitoring
+SCAN_LOGGING_CONFIGURATION="1"
+SCAN_MONITORING_CONFIGURATION="1"
+SCAN_ALERTING_CONFIGURATION="1"
+
+# Cloud Security Compliance
+SCAN_COMPLIANCE_FRAMEWORKS="1"
+GENERATE_COMPLIANCE_REPORTS="1"
+AUTOMATE_COMPLIANCE_CHECKS="1"
+
+# Cloud Security Threat Detection
+ENABLE_THREAT_DETECTION="1"
+THREAT_INTELLIGENCE_FEEDS="1"
+BEHAVIORAL_ANALYTICS="1"
+ANOMALY_DETECTION="1"
+
+# Cloud Security Incident Response
+INCIDENT_RESPONSE_PLAN="1"
+AUTOMATED_INCIDENT_RESPONSE="1"
+FORENSICS_COLLECTION="1"
+
+# Cloud Security Training and Awareness
+SECURITY_AWARENESS_TRAINING="1"
+PHISHING_SIMULATION="1"
+SECURITY_CERTIFICATION="1"
+
+# Cloud Security Governance
+SECURITY_GOVERNANCE_FRAMEWORK="1"
+RISK_MANAGEMENT="1"
+SECURITY_METRICS_AND_REPORTING="1"
+
+# Cloud Security Continuous Improvement
+CONTINUOUS_IMPROVEMENT_PROGRAM="1"
+SECURITY_MATURITY_ASSESSMENT="1"
+BENCHMARKING_AND_METRICS="1"
