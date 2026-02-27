@@ -1,9 +1,69 @@
-FROM docker.io/blackarchlinux/blackarch:latest
+# Build stage for reducing final image size
+FROM docker.io/blackarchlinux/blackarch:latest as builder
 
-# Upgrade system
-RUN pacman -Syu --noconfirm
+# Install build dependencies
+RUN pacman -Syu --noconfirm --needed \
+    git \
+    base-devel \
+    && pacman -Scc --noconfirm
 
-# Install sn1per from official repository
-RUN pacman -Sy sn1per --noconfirm
+# Final stage
+FROM ghcr.io/blackarchlinux/blackarch:latest
 
-CMD ["sn1per"]
+# Set metadata
+LABEL org.opencontainers.image.title='Sn1per - BlackArch Linux' \
+    org.opencontainers.image.description='Automated pentest framework for offensive security experts' \
+    org.opencontainers.image.documentation='https://github.com/threatcode/Sn1per' \
+    org.opencontainers.image.source='https://github.com/threatcode/Sn1per' \
+    org.opencontainers.image.url='https://github.com/threatcode/Sn1per' \
+    org.opencontainers.image.vendor='Sn1per Security' \
+    org.opencontainers.image.licenses='GPL-3.0' \
+    org.opencontainers.image.authors='@xer0dayz' \
+    org.opencontainers.image.version='latest' \
+    maintainer="@xer0dayz"
+
+# Set environment variables
+ENV LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8 \
+    HOME=/home/sniper
+
+# Create non-root user and set up working directory
+RUN set -x && \
+    groupadd -r sniper && \
+    useradd -r -g sniper -d ${HOME} -s /bin/bash sniper && \
+    mkdir -p ${HOME} && \
+    chown -R sniper:sniper ${HOME}
+
+# Install Sn1per and clean up in a single layer
+RUN set -x && \
+    pacman -Syu --noconfirm --needed \
+        sn1per \
+        python \
+        python-pip \
+        postgresql \
+        postgresql-libs \
+    && pacman -Scc --noconfirm
+
+# Configure PostgreSQL for Metasploit
+RUN set -x && \
+    mkdir -p /var/run/postgresql && \
+    chown -R postgres:postgres /var/run/postgresql && \
+    chmod 2777 /var/run/postgresql && \
+    if [ -f /usr/bin/msfdb ]; then \
+        sed -i 's/systemctl status ${PG_SERVICE}/pg_ctl status -D ${PGDATA}/g' /usr/bin/msfdb; \
+    fi
+
+# Switch to non-root user
+USER sniper
+WORKDIR ${HOME}
+
+# Set up volumes for persistent data
+VOLUME ["${HOME}/.msf4", "${HOME}/.sniper"]
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD sn1per --version || exit 1
+
+# Default command
+ENTRYPOINT ["sn1per"]
+CMD ["--help"]

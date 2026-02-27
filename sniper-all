@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Check if target is provided
+if [ -z "$1" ]; then
+  echo "Usage: $0 <TARGET>"
+  echo "Example: $0 example.com"
+  exit 1
+fi
+
+TARGET=$1
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+LOGDIR="/root/sniper-scans/$TARGET-$TIMESTAMP"
+
+# Create log directory
+mkdir -p "$LOGDIR"
+
+# Define all available modes
+MODES=(
+  "normal" "web" "webscan" "recon" "osint" 
+  "fullportonly" "fullportscan" "vulnscan" 
+  "bruteforce" "cloud-asset-discovery" 
+  "container-security" "api-security-scan" 
+  "ml-analysis" "webporthttp" "webporthttps"
+  "stealth" "discover" "flyover" "airstrike"
+  "nuke" "evasion-techniques"
+)
+
+# Function to run a scan mode
+run_scan() {
+  local mode=$1
+  echo -e "\n[$(date '+%Y-%m-%d %H:%M:%S')] Starting $mode scan..."
+  
+  # Run the scan and capture output
+  sniper -t "$TARGET" -m "$mode" 2>&1 | tee "$LOGDIR/${mode}.log"
+  
+  # Check if the command was successful
+  if [ ${PIPESTATUS[0]} -eq 0 ]; then
+    echo -e "[$(date '+%Y-%m-%d %H:%M:%S')] $mode scan completed successfully"
+  else
+    echo -e "[$(date '+%Y-%m-%d %H:%M:%S')] WARNING: $mode scan encountered errors"
+  fi
+}
+
+# Main execution
+echo "Starting comprehensive scan of $TARGET"
+echo "Logs will be saved to: $LOGDIR"
+echo "This may take a while..."
+
+# Run each scan mode
+for mode in "${MODES[@]}"; do
+  run_scan "$mode"
+done
+
+echo -e "\n[$(date '+%Y-%m-%d %H:%M:%S')] All scans completed!"
+echo "Results saved to: $LOGDIR"
+echo "You can review the logs with: ls -la $LOGDIR"

@@ -1,0 +1,263 @@
+# API Security Configuration for Sn1per
+# This configuration optimizes Sn1per for API security testing
+
+# General Settings
+API_TYPE="rest"  # Options: rest, graphql, soap, grpc, websocket
+API_AUTH_TYPE="none"  # Options: none, basic, bearer, oauth2, api-key, jwt, aws-sigv4
+API_BASE_URL=""
+API_VERSION="v1"
+API_DOCUMENTATION=""  # URL to OpenAPI/Swagger documentation
+
+# Authentication Configuration
+## Basic Auth
+API_USERNAME=""
+API_PASSWORD=""
+
+## Bearer Token
+API_BEARER_TOKEN=""
+
+## OAuth2 Configuration
+OAUTH2_TOKEN_URL=""
+OAUTH2_CLIENT_ID=""
+OAUTH2_CLIENT_SECRET=""
+OAUTH2_SCOPE=""
+
+## API Key Configuration
+API_KEY_NAME="X-API-Key"
+API_KEY_VALUE=""
+
+## JWT Configuration
+JWT_SECRET=""
+JWT_ALGORITHM="HS256"
+
+# Request Headers
+API_HEADERS="Content-Type: application/json"
+CUSTOM_HEADERS=""  # Comma-separated list of headers (e.g., "X-Header1: value1, X-Header2: value2")
+
+# Rate Limiting
+RATE_LIMIT_REQUESTS="100"  # Max requests per minute
+RATE_LIMIT_PER_IP="true"
+RATE_LIMIT_STRATEGY="ip"  # Options: ip, user, token, header:Header-Name
+
+# Scanning Scope
+SCAN_ENDPOINTS="all"  # Comma-separated list or 'all'
+EXCLUDE_ENDPOINTS=""  # Comma-separated list of endpoints to exclude
+SCAN_DEPTH="3"  # Maximum depth for parameter discovery
+
+# Test Configuration
+TEST_METHODS="GET,POST,PUT,DELETE"  # HTTP methods to test
+TEST_PARAMETERS="all"  # Comma-separated list or 'all'
+TEST_PAYLOADS="$INSTALL_DIR/wordlists/api_payloads.txt"
+TEST_FUZZING="1"  # Enable fuzzing
+TEST_INJECTION="1"  # Test for injection vulnerabilities
+TEST_AUTHENTICATION="1"  # Test authentication mechanisms
+TEST_AUTHORIZATION="1"  # Test authorization bypasses
+TEST_RATE_LIMITING="1"  # Test for rate limiting issues
+TEST_BUSINESS_LOGIC="1"  # Test for business logic flaws
+
+# Security Testing Options
+## OWASP API Top 10
+TEST_API1_2019="1"  # Broken Object Level Authorization
+TEST_API2_2019="1"  # Broken User Authentication
+TEST_API3_2019="1"  # Excessive Data Exposure
+TEST_API4_2019="1"  # Lack of Resources & Rate Limiting
+TEST_API5_2019="1"  # Broken Function Level Authorization
+TEST_API6_2019="1"  # Mass Assignment
+TEST_API7_2019="1"  # Security Misconfiguration
+TEST_API8_2019="1"  # Injection
+TEST_API9_2019="1"  # Improper Assets Management
+TEST_API10_2019="1" # Insufficient Logging & Monitoring
+
+## Common API Vulnerabilities
+TEST_INJECTION_ATTACKS="1"  # SQLi, NoSQLi, Command Injection, etc.
+TEST_XSS="1"  # Cross-Site Scripting
+TEST_XXE="1"  # XML External Entity
+TEST_SSRF="1"  # Server-Side Request Forgery
+TEST_IDOR="1"  # Insecure Direct Object References
+TEST_JWT_ISSUES="1"  # JWT vulnerabilities
+TEST_CRLF_INJECTION="1"  # CRLF Injection
+TEST_HEADER_INJECTION="1"  # HTTP Header Injection
+TEST_CORS_MISCONFIG="1"  # CORS Misconfiguration
+TEST_CSRF="1"  # Cross-Site Request Forgery
+TEST_FILE_UPLOAD="1"  # File Upload Vulnerabilities
+TEST_GRAPHQL_ISSUES="1"  # GraphQL-specific issues
+
+# API Fuzzing Configuration
+FUZZING_ENGINE="ffuf"  # Options: ffuf, wfuzz, burp, zap
+FUZZING_WORDLIST="$INSTALL_DIR/wordlists/api_fuzz.txt"
+FUZZING_EXTENSIONS=""  # Comma-separated list (e.g., "json,xml,php")
+FUZZING_THREADS="10"
+FUZZING_RATE="100"  # Requests per second
+
+# API Documentation Analysis
+ANALYZE_SWAGGER="1"
+ANALYZE_OPENAPI="1"
+ANALYZE_GRAPHQL_SCHEMA="1"
+DOCUMENTATION_PATH=""  # Path to local documentation files
+
+# API Endpoint Discovery
+DISCOVER_ENDPOINTS="1"
+USE_GAU="1"  # Fetch known URLs from Common Crawl
+USE_WAYBACK="1"  # Check Wayback Machine
+USE_COMMON_PATHS="1"  # Test common API paths
+USE_COMMON_PARAMETERS="1"  # Test common parameter names
+
+# Authentication Testing
+TEST_AUTH_BYPASS="1"
+TEST_TOKEN_MANIPULATION="1"
+TEST_JWT_ATTACKS="1"
+TEST_OAUTH_ISSUES="1"
+TEST_SESSION_MANAGEMENT="1"
+
+# Data Validation Testing
+TEST_INPUT_VALIDATION="1"
+TEST_OUTPUT_ENCODING="1"
+TEST_CONTENT_TYPE_VALIDATION="1"
+TEST_ACCEPT_HEADER_MANIPULATION="1"
+
+# Security Headers Testing
+TEST_SECURITY_HEADERS="1"
+REQUIRED_HEADERS="Strict-Transport-Security, X-Content-Type-Options, X-Frame-Options, Content-Security-Policy, X-XSS-Protection"
+
+# API Version Testing
+TEST_API_VERSIONING="1"
+TEST_DEPRECATED_ENDPOINTS="1"
+TEST_VERSION_HEADER="1"
+
+# Performance and Reliability Testing
+TEST_LOAD="1"
+LOAD_TEST_USERS="100"
+LOAD_TEST_DURATION="300"  # seconds
+LOAD_TEST_RAMP_UP="60"  # seconds
+
+# Error Handling Testing
+TEST_ERROR_HANDLING="1"
+TEST_STACK_TRACE_LEAKAGE="1"
+TEST_ERROR_MESSAGES="1"
+
+# API Dependencies Testing
+TEST_DEPENDENCIES="1"
+TEST_THIRD_PARTY_APIS="1"
+TEST_MICROSERVICES="1"
+
+# API Integration Testing
+TEST_WEBHOOKS="1"
+TEST_WEBHOOK_VALIDATION="1"
+TEST_WEBHOOK_REPLAY="1"
+
+# API Security Headers Configuration
+SECURITY_HEADERS="1"
+HSTS_ENABLED="1"
+HSTS_MAX_AGE="31536000"  # 1 year
+HSTS_INCLUDE_SUBDOMAINS="1"
+HSTS_PRELOAD="1"
+CSP_ENABLED="1"
+CSP_POLICY="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self';"
+X_CONTENT_TYPE_OPTIONS="nosniff"
+X_FRAME_OPTIONS="DENY"
+X_XSS_PROTECTION="1; mode=block"
+REFERRER_POLICY="no-referrer"
+PERMISSIONS_POLICY_ENABLED="1"
+PERMISSIONS_POLICY="geolocation=(), microphone=(), camera=()"
+
+# API Rate Limiting Configuration
+RATE_LIMIT_ENABLED="1"
+RATE_LIMIT_WINDOW="60"  # seconds
+RATE_LIMIT_MAX_REQUESTS="100"
+RATE_LIMIT_BLOCK_DURATION="300"  # seconds
+
+# API Logging and Monitoring
+ENABLE_LOGGING="1"
+LOG_LEVEL="info"  # Options: debug, info, warn, error
+LOG_FORMAT="json"  # Options: json, text
+LOG_RETENTION_DAYS="30"
+MONITORING_ENABLED="1"
+MONITORING_PROVIDER=""  # Options: datadog, newrelic, prometheus, elasticsearch
+
+# API Security Testing Tools
+USE_OWASP_ZAP="1"
+ZAP_API_KEY=""
+ZAP_PROXY="http://localhost:8080"
+
+USE_BURP="0"
+BURP_API_KEY=""
+BURP_PROXY="http://localhost:8081"
+
+USE_NUCLEI="1"
+NUCLEI_TEMPLATES="$INSTALL_DIR/nuclei-templates"
+NUCLEI_SEVERITY="critical,high,medium"
+
+USE_POSTMAN="1"
+POSTMAN_COLLECTION=""
+POSTMAN_ENVIRONMENT=""
+
+USE_INSOMNIA="0"
+INSOMNIA_WORKSPACE=""
+
+# API Security Headers Validation
+VALIDATE_SECURITY_HEADERS="1"
+REQUIRE_STRICT_TRANSPORT_SECURITY="1"
+REQUIRE_CONTENT_SECURITY_POLICY="1"
+REQUIRE_X_CONTENT_TYPE_OPTIONS="1"
+REQUIRE_X_FRAME_OPTIONS="1"
+REQUIRE_X_XSS_PROTECTION="1"
+REQUIRE_REFERRER_POLICY="1"
+REQUIRE_PERMISSIONS_POLICY="1"
+
+# API Security Testing Advanced Options
+ADVANCED_FUZZING="1"
+ADVANCED_INJECTION_TESTS="1"
+ADVANCED_AUTH_TESTING="1"
+ADVANCED_ANALYTICS="1"
+
+# API Security Reporting
+REPORT_FORMAT="html"  # Options: html, json, pdf, markdown
+REPORT_OUTPUT_DIR="$LOOT_DIR/api-security"
+REPORT_DETAIL_LEVEL="detailed"  # Options: quick, standard, detailed
+GENERATE_EXECUTIVE_SUMMARY="1"
+INCLUDE_REMEDIATION_GUIDANCE="1"
+
+# API Security Notifications
+ENABLE_EMAIL_NOTIFICATIONS="0"
+EMAIL_RECIPIENTS=""
+ENABLE_SLACK_NOTIFICATIONS="0"
+SLACK_WEBHOOK_URL=""
+ENABLE_WEBHOOK_NOTIFICATIONS="0"
+WEBHOOK_URL=""
+
+# API Security Automation
+ENABLE_AUTOMATION="1"
+AUTOMATION_PROVIDER=""  # Options: jenkins, gitlab, github-actions, azure-devops
+AUTOMATION_TRIGGER=""  # Options: push, pull-request, schedule, manual
+AUTOMATION_SCHEDULE="0 0 * * *"  # Daily at midnight
+
+# API Security Continuous Integration/Continuous Deployment (CI/CD)
+ENABLE_CI_CD_INTEGRATION="1"
+CI_CD_PROVIDER=""  # Options: jenkins, gitlab, github, bitbucket, azure-devops
+CI_CD_CONFIG_FILE=""
+
+# API Security Customization
+CUSTOM_CHECKS_ENABLED="1"
+CUSTOM_CHECKS_DIR="$INSTALL_DIR/conf/api-checks"
+CUSTOM_RULES_ENABLED="1"
+CUSTOM_RULES_DIR="$INSTALL_DIR/conf/api-rules"
+
+# API Security Machine Learning
+ENABLE_ML_ANALYSIS="1"
+ML_MODEL_PATH="$INSTALL_DIR/ml-models/api-security"
+ML_THRESHOLD="0.8"
+
+# API Security Threat Intelligence
+ENABLE_THREAT_INTELLIGENCE="1"
+THREAT_INTELLIGENCE_FEEDS=""  # Comma-separated list of threat intelligence feed URLs
+THREAT_INTELLIGENCE_UPDATE_FREQUENCY="24h"
+
+# API Security Governance
+ENABLE_GOVERNANCE="1"
+GOVERNANCE_FRAMEWORK=""  # Options: itil, cobit, iso27001, nist-csf
+GOVERNANCE_POLICIES=""  # Path to governance policies
+
+# API Security Continuous Improvement
+ENABLE_CONTINUOUS_IMPROVEMENT="1"
+IMPROVEMENT_METRICS=""  # Comma-separated list of metrics to track
+IMPROVEMENT_GOALS=""  # Comma-separated list of improvement goals
